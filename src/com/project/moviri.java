@@ -12,28 +12,39 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Default class to run the application
+ */
 public class moviri {
     public static void main(String[] args) throws FileNotFoundException {
 
+        // create lists of data from csv files along with result list
         List<Bandwidth> bandwidthList = getArrayFromBandwidth("src//bandwidth.csv");
         List<NetworkBitrate> networkBitrateList = getArrayFromNetBitRate("src//netbitrate.csv");
         List<NetworkBandwidthUtilization> networkBandwidthUtilizationList = new ArrayList();
 
+        // loop through each list and combine the data
         for(NetworkBitrate n : networkBitrateList) {
             for(Bandwidth b : bandwidthList) {
-//                System.out.println("b: " + b.toString());
-//                System.out.println("n: " + n.toString());
+                // check if bandwidth correlates with networkBitRate
                 if(n.getServer().equals( b.getServer()) && n.getInterfaceName().equals(b.getInterfaceName())) {
                     networkBandwidthUtilizationList.add(new NetworkBandwidthUtilization(n.getTimestamp(), n.getServer(), n.getInterfaceName(), n.getNetBitRate(), b.getBandwidth()));
                 }
             }
         }
 
+        // print out result
         for(NetworkBandwidthUtilization n : networkBandwidthUtilizationList) {
             System.out.println(n.toString());
         }
     }
 
+    /**
+     * returns a List of type NetworkBitrate from the input csv file
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     */
     public static List<NetworkBitrate> getArrayFromNetBitRate(String file) throws FileNotFoundException {
 
         // create scanner to read csv file
@@ -61,6 +72,12 @@ public class moviri {
         return networkBitrateList;
     }
 
+    /**
+     * returns a List of type NetworkBitrate from the input csv file
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     */
     public static List<Bandwidth> getArrayFromBandwidth(String file) throws FileNotFoundException {
 
         // create scanner to read csv file
